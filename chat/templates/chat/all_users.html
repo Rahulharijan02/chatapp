@@ -1,20 +1,23 @@
-
-
- {% block content %}
- <br>
- <h1>Select the user you want to chat with...</h1>
- <br>
- <form method="post">
-   {% csrf_token %}
-   <select id="users" name="users">
-     {% for receiver in users %}
-       <option value="{{ receiver.id }}">
-         {{ receiver.username }} {{ receiver.first_name }} {{ receiver.last_name }}
-       </option>
-     {% endfor %}
-   </select>
-   <br><br>
-   <button class="btn" type="submit" style="background-color: #182430; color: white;">Chat</button>
- </form>
- {% endblock %}
- 
+{% extends 'chat/base.html' %}
+{% block content %}
+<br>
+<h1>Select the user you want to chat with...</h1>
+<br>
+<div class="user-list">
+  <form method="post">
+    {% csrf_token %}
+    <ul>
+      {% for receiver in users %}
+        <li>
+          <label>
+            <input type="radio" name="users" value="{{ receiver.id }}">
+            {{ receiver.username }} {{ receiver.first_name }} {{ receiver.last_name }}
+          </label>
+        </li>
+      {% endfor %}
+    </ul>
+    <br>
+    <button class="btn" type="submit" style="background-color: #182430; color: white;">Chat</button>
+  </form>
+</div>
+{% endblock %}

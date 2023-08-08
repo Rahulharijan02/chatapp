@@ -1,13 +1,30 @@
-<form method="post" action="{% url 'register' %}">
-    {% csrf_token %}
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username">
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password">
-    <br>
-    <input type="submit" value="Register">
-  </form>
+
+
   
-  <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+  {% extends 'chat/base.html' %}
+  {% block content %}
+  <div class="containter pt-4">
+    <div class="col-lg-3 shadow  mx-auto p-0">
+      <div class="alert alert-success">
+        <h2>Create Account</h2>
+      </div>
+      <div  class="p-4 ">
+        <form method="post" action="{% url 'register' %}">
+          {% csrf_token %}
+          <label for="username">Username:</label><br>
+          <input type="text" id="username" name="username">
+          <br>
+          <label for="password">Password:</label><br>
+          <input type="password" id="password" name="password">
+          <br>
+          <br>
+          <input class="btn btn-success" type="submit" value="Create Account">
+        </form>
+        <br>
+        <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+        
+      </div>
+    </div>
+  </div>
   
+  {% endblock %}
