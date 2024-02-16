@@ -85,14 +85,16 @@ class ChatRoom(LoginRequiredMixin, View):
         room = get_object_or_404(Room, room_name=room_name)
         sender_id = request.user.id
         sender_name = request.user.username
-        receiver = room.receiver_user if room.sender_user.id == sender_id else room.sender_user 
-
+        receiver = room.receiver_user if room.sender_user.id == sender_id else room.sender_user
+        # print(receiver) 
+        # print(f"receiver id{receiver.id}")
         if receiver is None:
             return redirect('rooms')  
 
        
         messages = Message.objects.filter(Q(sender_user=sender_id, receiver_user=receiver.id) |
                                           Q(sender_user=receiver.id, receiver_user=sender_id)).order_by('timestamp')
+        print(messages)
         user = User.objects.get(pk=receiver.id)
 
         return render(request, 'chat/room.html', {  

@@ -50,6 +50,7 @@ class ChatConsumer(WebsocketConsumer):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         sender_id = text_data_json['sender_id']
+        receiver_id = text_data_json['receiver_id']
         sender_name = text_data_json['sender_name']
         room_name = self.room_name  # Get the room_name from URL parameters
 
@@ -65,10 +66,10 @@ class ChatConsumer(WebsocketConsumer):
             return
 
         # Determine the receiver's ID based on the sender's ID and room
-        if room.sender_user.id == sender_id:
-            receiver_id = room.receiver_user.id
-        else:
-            receiver_id = room.sender_user.id
+        # if room.sender_user.id == sender_id:
+        #     receiver_id = room.receiver_user.id
+        # else:
+        #     receiver_id = room.sender_user.id
 
         # Save the message in the database
         self.save_message(message, sender_id, receiver_id)

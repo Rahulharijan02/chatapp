@@ -5,15 +5,7 @@
 <div>
   <div class="container pt-4">
     <div class="row  p-0 mt-4">
-      <!-- <div class="col-lg-2 mx-auto shadow p-0"> -->
-        <!-- <div class="alert alert-info">
-          <h2>User Details</h2>
-        </div>
-        <div class="p-4">
-            {{ user }}
-           
-        </div>
-      </div> -->
+
 
 
 
@@ -27,6 +19,15 @@
             margin-left: 1%;
             padding: 1;
             overflow-y: scroll">
+        {% for message in messages %}
+        {% if message.sender_user.id == sender_id %}
+            <!-- Display sent message on the right -->
+            <p style="text-align: right;">{{ message.message }}</p>
+        {% else %}
+            <!-- Display received message on the left -->
+            <p style="text-align: left;"><b>{{ message.sender_user.username }}</b>: {{ message.message }}</p>
+        {% endif %}
+    {% endfor %}
             </div>
             <div style="margin-left: 1%; padding-top: 1%">
                 <input id="chat-message-input" type="text" size="60" style="width: 85%">&nbsp;
@@ -39,9 +40,7 @@
             {{ room_name|json_script:"room-name" }}
             
             <script>
-                // const roomName = JSON.parse(document.getElementById('room-name').textContent);
                 const roomName = "{{ room_name }}";
-            
             
                 // Establish WebSocket connection
                 const chatSocket = new WebSocket(
@@ -54,13 +53,16 @@
             
                 chatSocket.onmessage = function (e) {
                     const data = JSON.parse(e.data);
-                    // to enhance the chat log
-                    if (data.sender_name === '{{ request.user.username }}') {
+                    const isCurrentUser = data.sender_name === '{{ request.user.username }}';
+            
+                    // Display the message without the sender's name for the current user
+                    if (isCurrentUser) {
                         $("#chat-log").append("<div style='float: right'>" +
-                           data.sender_name + ":" + data.message + "</div><br>");
+                            data.message + "</div><br>");
                     } else {
+                        // Display the message with the sender's name for other users
                         $("#chat-log").append("<div style='float: left'>" +
-                            data.sender_name + ":" + data.message + "</div><br>");
+                            "<b>" + data.sender_name + ":</b> "  + data.message + "</div><br>");
                     }
                     $("#chat-log").scrollTop($("#chat-log")[0].scrollHeight);
                 };
@@ -85,7 +87,6 @@
                 });
             
             </script>
-
         
             
 
